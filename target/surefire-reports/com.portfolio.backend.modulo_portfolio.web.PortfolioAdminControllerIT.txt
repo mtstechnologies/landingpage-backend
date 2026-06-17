@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.portfolio.backend.modulo_portfolio.web.PortfolioAdminControllerIT
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.99 s -- in com.portfolio.backend.modulo_portfolio.web.PortfolioAdminControllerIT
