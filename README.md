@@ -96,34 +96,23 @@ Cliente → [MdcFilter: injeta X-Trace-Id]
 - **Docker** (para subir PostgreSQL e Redis)
 - **Maven** (ou usar o wrapper `./mvnw` incluso no projeto)
 
-### 1. Subir a infraestrutura com Docker
+### 1. Configurar variáveis de ambiente
 
-Crie um arquivo `docker-compose.yml` na raiz do projeto com o conteúdo abaixo:
+Copie o arquivo de exemplo e ajuste os valores se necessário:
 
-```yaml
-services:
-  postgres:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_DB: portfolio_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
+```bash
+cp .env.example .env
 ```
 
-Em seguida, inicie os containers:
+### 2. Subir a infraestrutura com Docker
 
 ```bash
 docker-compose up -d
 ```
 
-### 2. Executar a aplicação
+Aguarde os healthchecks passarem (postgres e redis ficam `healthy`).
+
+### 3. Executar a aplicação
 
 ```bash
 ./mvnw spring-boot:run
@@ -131,7 +120,7 @@ docker-compose up -d
 
 A API estará disponível em: **`http://localhost:8080`**
 
-### 3. Verificar a saúde da aplicação
+### 4. Verificar a saúde da aplicação
 
 ```bash
 curl http://localhost:8080/api/v1/portfolio/perfil
