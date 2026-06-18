@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public record ProjetoResponse(
         UUID id,
         String titulo,
+        String slug,
         String descricao,
         String urlCapa,
         String linkProducao,
@@ -26,6 +27,7 @@ public record ProjetoResponse(
         return new ProjetoResponse(
                 projeto.getId(),
                 projeto.getTitulo(),
+                projeto.getSlug(),
                 projeto.getDescricao(),
                 projeto.getUrlCapa(),
                 projeto.getLinkProducao(),

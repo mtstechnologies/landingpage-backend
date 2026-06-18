@@ -86,6 +86,7 @@ class PortfolioAdminControllerIT {
         String idempotencyKey = "test-key-123";
         ProjetoRequest request = new ProjetoRequest(
                 "Projeto Monólito",
+                "projeto-monolito",
                 "Descrição detalhada",
                 "http://foto.jpg",
                 "http://prod.com",
@@ -142,6 +143,7 @@ class PortfolioAdminControllerIT {
         // Arrange
         ProjetoRequest request = new ProjetoRequest(
                 "Projeto Sem Chave",
+                "projeto-sem-chave",
                 "Descrição",
                 "http://foto.jpg",
                 "http://prod.com",

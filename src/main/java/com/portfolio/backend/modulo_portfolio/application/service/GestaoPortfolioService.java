@@ -10,6 +10,7 @@ import com.portfolio.backend.modulo_portfolio.domain.exception.TecnologiaDuplica
 import com.portfolio.backend.modulo_portfolio.infrastructure.repository.PerfilRepository;
 import com.portfolio.backend.modulo_portfolio.infrastructure.repository.ProjetoRepository;
 import com.portfolio.backend.modulo_portfolio.infrastructure.repository.TecnologiaRepository;
+import com.portfolio.backend.modulo_portfolio.web.dto.ProjetoResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -66,8 +67,16 @@ public class GestaoPortfolioService {
         return projetoRepository.findAllWithTecnologiasOrderByDataDesenvolvimentoDesc();
     }
 
+    @Transactional(readOnly = true)
+    public ProjetoResponse buscarProjetoPorSlug(String slug) {
+        Projeto projeto = projetoRepository.findBySlug(slug)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Projeto não encontrado: " + slug));
+        return ProjetoResponse.fromEntity(projeto);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
-    public Projeto criarProjeto(Projeto projeto, Set<UUID> tecnologiaIds) {
+    public Projeto criarProjeto(Projeto projeto, String slug, Set<UUID> tecnologiaIds) {
+        projeto.setSlug(slug);
         if (tecnologiaIds != null && !tecnologiaIds.isEmpty()) {
             Set<Tecnologia> tecnologias = new HashSet<>();
             for (UUID techId : tecnologiaIds) {
@@ -81,10 +90,11 @@ public class GestaoPortfolioService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Projeto atualizarProjeto(UUID id, Projeto dadosProjeto, Set<UUID> tecnologiaIds) {
+    public Projeto atualizarProjeto(UUID id, Projeto dadosProjeto, String slug, Set<UUID> tecnologiaIds) {
         Projeto projeto = projetoRepository.findById(id)
                 .orElseThrow(() -> new ProjetoNaoEncontradoException(id));
         projeto.setTitulo(dadosProjeto.getTitulo());
+        projeto.setSlug(slug);
         projeto.setDescricao(dadosProjeto.getDescricao());
         projeto.setUrlCapa(dadosProjeto.getUrlCapa());
         projeto.setLinkProducao(dadosProjeto.getLinkProducao());

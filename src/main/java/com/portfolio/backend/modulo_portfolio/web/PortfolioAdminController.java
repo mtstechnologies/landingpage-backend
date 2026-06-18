@@ -60,10 +60,10 @@ public class PortfolioAdminController {
                 .linkRepositorio(request.linkRepositorio())
                 .dataDesenvolvimento(request.dataDesenvolvimento())
                 .build();
-        Projeto novoProjeto = gestaoPortfolioService.criarProjeto(projeto, request.tecnologiaIds());
+        Projeto novoProjeto = gestaoPortfolioService.criarProjeto(projeto, request.slug(), request.tecnologiaIds());
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(novoProjeto.getId())
+                .path("/{slug}")
+                .buildAndExpand(novoProjeto.getSlug())
                 .toUri();
         return ResponseEntity.created(uri).body(ProjetoResponse.fromEntity(novoProjeto));
     }
@@ -78,7 +78,7 @@ public class PortfolioAdminController {
                 .linkRepositorio(request.linkRepositorio())
                 .dataDesenvolvimento(request.dataDesenvolvimento())
                 .build();
-        Projeto projetoAtualizado = gestaoPortfolioService.atualizarProjeto(id, projeto, request.tecnologiaIds());
+        Projeto projetoAtualizado = gestaoPortfolioService.atualizarProjeto(id, projeto, request.slug(), request.tecnologiaIds());
         return ResponseEntity.ok(ProjetoResponse.fromEntity(projetoAtualizado));
     }
 

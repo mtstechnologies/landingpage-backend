@@ -40,6 +40,9 @@ public class Projeto {
     @Column(nullable = false)
     private String titulo;
 
+    @Column(nullable = false, unique = true)
+    private String slug;
+
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
