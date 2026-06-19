@@ -76,4 +76,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setProperty("timestamp", Instant.now());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
     }
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ProblemDetail> handleDataIntegrityViolation(org.springframework.dao.DataIntegrityViolationException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,
+                "Conflito de integridade: o registro possui dados duplicados ou viola restrições do banco.");
+        problem.setTitle("Conflito de Dados");
+        problem.setType(URI.create("https://api.portfolio.com/errors/data-integrity-violation"));
+        problem.setProperty("timestamp", Instant.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+    }
 }

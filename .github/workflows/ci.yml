@@ -28,9 +28,8 @@ jobs:
           # Testcontainers usa o Docker do GitHub runner — sem setup extra
           TESTCONTAINERS_RYUK_DISABLED: true
 
-      - name: Verificar cobertura (falha se < 60%)
+      - name: Verificar cobertura (falha se < 70%)
         run: ./mvnw jacoco:check -B
-        continue-on-error: true  # remover quando cobertura estiver estável
 
   openapi-export:
     name: Exportar OpenAPI spec
@@ -75,9 +74,23 @@ jobs:
       - name: Subir aplicação e exportar openapi.yaml
         run: |
           ./mvnw spring-boot:run &
-          sleep 20
+          APP_PID=$!
+
+          # Aguardar readiness via health check (até 60 segundos)
+          echo "Aguardando aplicação ficar healthy..."
+          for i in $(seq 1 30); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Aplicação pronta após ${i}x (${i}0s)"
+              break
+            fi
+            echo "⏳ Tentativa $i — status: $STATUS"
+            sleep 2
+          done
+
+          # Exportar spec
           curl -f http://localhost:8080/v3/api-docs.yaml -o .specs/openapi.yaml
-          kill %1
+          kill $APP_PID
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/portfolio_db
           SPRING_DATASOURCE_USERNAME: postgres
