@@ -1,0 +1,23 @@
+# Configurações sobrescritas em produção (profile: prod)
+# Ativado com: SPRING_PROFILES_ACTIVE=prod
+
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+# SpringDoc — desabilitar Swagger UI em produção
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
+logging:
+  level:
+    root: WARN
+    com.portfolio.backend: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
