@@ -3,6 +3,7 @@ package com.portfolio.backend.modulo_portfolio.web;
 import com.portfolio.backend.modulo_portfolio.application.service.GestaoPortfolioService;
 import com.portfolio.backend.modulo_portfolio.web.dto.PerfilResponse;
 import com.portfolio.backend.modulo_portfolio.web.dto.ProjetoResponse;
+import com.portfolio.backend.modulo_portfolio.web.dto.TecnologiaResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +42,14 @@ public class PortfolioPublicoController {
         ProjetoResponse projeto = gestaoPortfolioService.buscarProjetoPorSlug(slug);
         response.setHeader("Cache-Control", "public, max-age=300");
         return ResponseEntity.ok(projeto);
+    }
+
+    @GetMapping("/tecnologias")
+    public ResponseEntity<List<TecnologiaResponse>> listarTecnologias() {
+        List<TecnologiaResponse> tecnologias = gestaoPortfolioService.listarTecnologias()
+                .stream()
+                .map(TecnologiaResponse::fromEntity)
+                .toList();
+        return ResponseEntity.ok(tecnologias);
     }
 }

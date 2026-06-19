@@ -11,10 +11,12 @@ import com.portfolio.backend.modulo_portfolio.web.dto.TecnologiaRequest;
 import com.portfolio.backend.modulo_portfolio.web.dto.TecnologiaResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -100,6 +102,15 @@ public class PortfolioAdminController {
                 .buildAndExpand(novaTecnologia.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(TecnologiaResponse.fromEntity(novaTecnologia));
+    }
+
+    @GetMapping("/tecnologias")
+    public ResponseEntity<List<TecnologiaResponse>> listarTecnologias() {
+        List<TecnologiaResponse> tecnologias = gestaoPortfolioService.listarTecnologias()
+                .stream()
+                .map(TecnologiaResponse::fromEntity)
+                .toList();
+        return ResponseEntity.ok(tecnologias);
     }
 
     @PostMapping("/projetos/{projetoId}/tecnologias/{tecnologiaId}")

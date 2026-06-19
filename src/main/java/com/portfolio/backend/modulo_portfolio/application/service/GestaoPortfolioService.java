@@ -129,6 +129,11 @@ public class GestaoPortfolioService {
         return tecnologiaRepository.save(tecnologia);
     }
 
+    @Transactional(readOnly = true)
+    public List<Tecnologia> listarTecnologias() {
+        return tecnologiaRepository.findAll();
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void associarTecnologia(UUID projetoId, UUID tecnologiaId) {
         Projeto projeto = projetoRepository.findById(projetoId)
